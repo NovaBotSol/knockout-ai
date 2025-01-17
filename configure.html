@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configure Your Fighter - KNOCKOUT AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syncopate:wght@400;700&display=swap');
+
+        :root {
+            --primary: #8B5CF6;
+            --primary-dark: #6D28D9;
+            --secondary: #3B82F6;
+            --accent: #ff3e3e;
+            --dark: #0a0a0a;
+            --darker: #050505;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--darker);
+            color: white;
+        }
+
+        .syncopate {
+            font-family: 'Syncopate', sans-serif;
+        }
+
+        .neon-text {
+            color: var(--primary);
+            text-shadow: 0 0 3px var(--primary);
+        }
+
+        .solid-black {
+            background-color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation will be controlled by React -->
+    <div id="nav-root"></div>
+
+    <!-- Particles Background -->
+    <div id="particles-js" class="fixed inset-0"></div>
+
+    <!-- Configuration Component Mount Point -->
+    <div id="configuration-root" class="z-10 relative"></div>
+
+    <!-- Initialize particles.js -->
+    <script>
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#8B5CF6' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5, random: true },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#8B5CF6',
+                    opacity: 0.2,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: 'none',
+                    random: true,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: { enable: true, mode: 'grab' },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 140,
+                        line_linked: { opacity: 0.4 }
+                    }
+                }
+            }
+        });
+    </script>
+
+    <!-- Component Definition and Mounting -->
+    <script type="text/babel">
+        // Navigation Component
+        function Navigation({ publicKey }) {
+            return (
+                <nav className="fixed w-full z-50 bg-black/80 backdrop-blur-md">
+                    <div className="container mx-auto px-6">
+                        <div className="flex items-center justify-between h-20">
+                            <div className="flex items-center gap-4">
+                                <a href="index.html" className="syncopate text-2xl font-bold neon-text">
+                                    KNOCKOUT AI
+                                </a>
+                                <a href="https://x.com/KNOCKOUTAI" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-purple-400 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="opacity-80 hover:opacity-100 transition-opacity">
+                                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                            {publicKey && (
+                                <div className="bg-black/50 px-4 py-2 rounded-md border border-purple-500/20">
+                                    <span className="text-gray-400">Connected: </span>
+                                    <span className="text-purple-400">{`${publicKey.slice(0, 4)}...${publicKey.slice(-4)}`}</span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </nav>
+            );
+        }
+
+        // Define questions array
+        const questions = [
+            {
+                id: 1,
+                question: "What's your agent's primary fighting style?",
+                options: [
+                    "Aggressive Rusher - Always closing the distance",
+                    "Technical Counter - Waiting for openings",
+                    "Strategic Zoner - Controlling space",
+                    "Balanced Fighter - Adaptable approach"
+                ]
+            },
+            {
+                id: 2,
+                question: "How should your agent react under pressure?",
+                options: [
+                    "Increase aggression and risk-taking",
+                    "Focus on defensive maneuvers",
+                    "Analyze and adapt tactics",
+                    "Maintain current strategy"
+                ]
+            },
+            {
+                id: 3,
+                question: "What's your agent's preferred range?",
+                options: [
+                    "Close-quarters combat",
+                    "Mid-range tactical",
+                    "Long-range specialist",
+                    "Dynamic range switching"
+                ]
+            },
+            {
+                id: 4,
+                question: "How should your agent manage energy?",
+                options: [
+                    "All-out assault until depleted",
+                    "Conservative energy management",
+                    "Burst-based approach",
+                    "Adaptive based on opponent"
+                ]
+            },
+            {
+                id: 5,
+                question: "What's your agent's learning priority?",
+                options: [
+                    "Opponent pattern recognition",
+                    "Combo optimization",
+                    "Resource management",
+                    "Position control"
+                ]
+            },
+            {
+                id: 6,
+                question: "How should your agent handle disadvantage?",
+                options: [
+                    "Aggressive reversal attempts",
+                    "Patient defensive play",
+                    "Technical escape options",
+                    "Mixed defensive/offensive"
+                ]
+            },
+            {
+                id: 7,
+                question: "What's your agent's combo preference?",
+                options: [
+                    "Long, risky combinations",
+                    "Short, safe combinations",
+                    "Mix-up heavy approach",
+                    "Situational adaptation"
+                ]
+            },
+            {
+                id: 8,
+                question: "How should your agent approach neutral game?",
+                options: [
+                    "Aggressive space control",
+                    "Defensive positioning",
+                    "Bait and punish",
+                    "Dynamic positioning"
+                ]
+            },
+            {
+                id: 9,
+                question: "What's your agent's recovery strategy?",
+                options: [
+                    "High-risk, fast recovery",
+                    "Safe, predictable recovery",
+                    "Mix-up based recovery",
+                    "Adaptive recovery paths"
+                ]
+            },
+            {
+                id: 10,
+                question: "How should your agent handle projectiles?",
+                options: [
+                    "Aggressive approach through",
+                    "Patient blocking",
+                    "Strategic dodging",
+                    "Mixed defensive options"
+                ]
+            },
+            {
+                id: 11,
+                question: "What's your agent's counter-attack priority?",
+                options: [
+                    "Maximum damage punishes",
+                    "Safe poke pressure",
+                    "Position advantage",
+                    "Resource gain"
+                ]
+            },
+            {
+                id: 12,
+                question: "How should your agent approach okizeme?",
+                options: [
+                    "High-pressure mix-ups",
+                    "Safe meaty attacks",
+                    "Baited responses",
+                    "Situation reading"
+                ]
+            },
+            {
+                id: 13,
+                question: "What's your agent's combo breaker style?",
+                options: [
+                    "Early aggressive breaks",
+                    "Late defensive breaks",
+                    "Mixed timing breaks",
+                    "Resource-based breaks"
+                ]
+            },
+            {
+                id: 14,
+                question: "How should your agent handle corner pressure?",
+                options: [
+                    "Aggressive escape attempts",
+                    "Patient blocking",
+                    "Technical reversals",
+                    "Mixed defensive options"
+                ]
+            },
+            {
+                id: 15,
+                question: "What's your agent's meter usage priority?",
+                options: [
+                    "Offensive extensions",
+                    "Defensive mechanics",
+                    "Mix-up potential",
+                    "Resource efficiency"
+                ]
+            },
+            {
+                id: 16,
+                question: "How should your agent approach mind games?",
+                options: [
+                    "Aggressive conditioning",
+                    "Passive adaptation",
+                    "Pattern recognition",
+                    "Dynamic mind games"
+                ]
+            },
+            {
+                id: 17,
+                question: "What's your agent's priority in neutral?",
+                options: [
+                    "Space control",
+                    "Resource gathering",
+                    "Position advantage",
+                    "Damage opportunity"
+                ]
+            },
+            {
+                id: 18,
+                question: "How should your agent handle wake-up?",
+                options: [
+                    "Aggressive reversals",
+                    "Safe defensive options",
+                    "Technical roll",
+                    "Mixed wake-up game"
+                ]
+            },
+            {
+                id: 19,
+                question: "What's your agent's frame trap approach?",
+                options: [
+                    "Tight frame traps",
+                    "Delayed frame traps",
+                    "Mix-up based traps",
+                    "Adaptive pressure"
+                ]
+            },
+            {
+                id: 20,
+                question: "How should your agent finish matches?",
+                options: [
+                    "High-risk closer",
+                    "Safe chip damage",
+                    "Mix-up based finish",
+                    "Adaptive approach"
+                ]
+            }
+        ];
+
+        function AgentConfiguration() {
+            const [connected, setConnected] = React.useState(false);
+            const [agentName, setAgentName] = React.useState('');
+            const [nameError, setNameError] = React.useState('');
+            const [currentQuestion, setCurrentQuestion] = React.useState(-1);
+            const [answers, setAnswers] = React.useState({});
+            const [loading, setLoading] = React.useState(false);
+            const [error, setError] = React.useState(null);
+            const [publicKey, setPublicKey] = React.useState(null);
+
+            // Validate agent name
+            const validateAgentName = (name) => {
+                const regex = /^[a-zA-Z0-9_]+$/;
+                if (!name.trim()) {
+                    return "Username is required";
+                }
+                if (!regex.test(name)) {
+                    return "Only letters, numbers, and underscores allowed";
+                }
+                if (name.length > 15) {
+                    return "Username must be 15 characters or less";
+                }
+                return "";
+            };
+
+            // Handle name input change
+            const handleNameChange = (e) => {
+                const newName = e.target.value;
+                setAgentName(newName);
+                setNameError(validateAgentName(newName));
+            };
+
+            const handleNameSubmit = (e) => {
+                e.preventDefault();
+                const validationError = validateAgentName(agentName);
+                if (validationError) {
+                    setNameError(validationError);
+                    return;
+                }
+                setCurrentQuestion(0);
+            };
+
+            const checkIfWalletIsConnected = async () => {
+                try {
+                    const { solana } = window;
+                    if (solana) {
+                        if (solana.isPhantom) {
+                            if (solana.isConnected) {
+                                const response = await solana.connect({ onlyIfTrusted: true });
+                                setPublicKey(response.publicKey.toString());
+                                setConnected(true);
+                                return true;
+                            }
+                        }
+                    } else {
+                        setError("Phantom wallet not installed");
+                        return false;
+                    }
+                } catch (error) {
+                    console.error(error);
+                    return false;
+                }
+            };
+
+            const connectWallet = async () => {
+                try {
+                    setLoading(true);
+                    setError(null);
+                    const { solana } = window;
+                    
+                    if (solana) {
+                        if (solana.isPhantom) {
+                            const response = await solana.connect();
+                            setPublicKey(response.publicKey.toString());
+                            setConnected(true);
+                        }
+                    } else {
+                        window.open("https://phantom.app/", "_blank");
+                    }
+                } catch (error) {
+                    console.error(error);
+                    setError("Failed to connect wallet");
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            const handleOptionSelect = (optionIndex) => {
+                setAnswers({ ...answers, [currentQuestion]: optionIndex });
+                
+                if (currentQuestion < questions.length - 1) {
+                    setCurrentQuestion(currentQuestion + 1);
+                } else {
+                    setLoading(true);
+                }
+            };
+
+            React.useEffect(() => {
+                const checkWallet = async () => {
+                    await checkIfWalletIsConnected();
+                };
+                checkWallet();
+            }, []);
+
+            // Update navigation with wallet status
+            const navRoot = ReactDOM.createRoot(document.getElementById('nav-root'));
+            navRoot.render(<Navigation publicKey={publicKey} />);
+
+            // Render questions interface if on questions
+            if (connected && currentQuestion >= 0) {
+                return (
+                    <div className="min-h-screen pt-20">
+                        <div className="container mx-auto px-6 py-12">
+                            <div className="max-w-xl mx-auto"> {/* Changed from max-w-3xl */}
+                                {!loading ? (
+                                    <div className="solid-black border border-purple-500/20 rounded-lg p-8">
+                                        <div className="mb-8">
+                                            <div className="w-full bg-black/50 h-2 rounded-full mb-4">
+                                                <div 
+                                                    className="bg-gradient-to-r from-purple-600 to-blue-600 h-full rounded-full transition-all duration-300"
+                                                    style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
+                                                />
+                                            </div>
+                                            <span className="text-gray-400">Question {currentQuestion + 1} of {questions.length}</span>
+                                        </div>
+                                        
+                                        <h2 className="text-2xl font-bold mb-8 font-['Syncopate']">{questions[currentQuestion].question}</h2>
+                                        
+                                        <div className="space-y-4">
+                                            {questions[currentQuestion].options.map((option, index) => (
+                                                <button
+                                                    key={index}
+                                                    onClick={() => handleOptionSelect(index)}
+                                                    className="w-full p-4 rounded-md border transition-all duration-300 text-left hover:border-purple-500/50 bg-black border-purple-500/20"
+                                                >
+                                                    {option}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="solid-black border border-purple-500/20 rounded-lg p-12 text-center">
+                                        <div className="mb-8">
+                                            <div className="w-16 h-16 border-4 border-purple-500/20 border-t-purple-500 rounded-full animate-spin mx-auto"/>
+                                        </div>
+                                        <h2 className="text-2xl font-bold mb-4 font-['Syncopate']">Creating Your Agent</h2>
+                                        <p className="text-gray-400">Please wait while we configure your custom AI agent...</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            // Render agent naming form if wallet is connected but no questions yet
+            if (connected && currentQuestion === -1) {
+                return (
+                    <div className="min-h-screen pt-20">
+                        <div className="container mx-auto px-6 py-12">
+                            <div className="max-w-md mx-auto"> {/* Changed from max-w-3xl */}
+                                <div className="solid-black border border-purple-500/20 rounded-lg p-8">
+                                    <h2 className="text-3xl font-bold mb-6 font-['Syncopate'] text-center">Name Your Agent</h2>
+                                    <form onSubmit={handleNameSubmit}>
+                                        <div className="mb-6">
+                                            <input
+                                                type="text"
+                                                value={agentName}
+                                                onChange={handleNameChange}
+                                                className={`w-full bg-black/50 border ${
+                                                    nameError ? 'border-red-500' : 'border-purple-500/20'
+                                                } rounded-md px-4 py-3 focus:outline-none focus:border-purple-500/50 text-white`}
+                                                placeholder="Enter agent name..."
+                                                maxLength="15"
+                                            />
+                                            {nameError && (
+                                                <p className="text-red-500 mt-2 text-sm">{nameError}</p>
+                                            )}
+                                            <p className="text-gray-400 mt-2 text-sm">
+                                                Only letters, numbers, and underscores allowed. Maximum 15 characters.
+                                            </p>
+                                        </div>
+                                        <button 
+                                            type="submit"
+                                            disabled={!!nameError || !agentName.trim()}
+                                            className={`w-full px-8 py-3 rounded-md transition-all duration-300 ${
+                                                nameError || !agentName.trim() 
+                                                    ? 'bg-gray-600 cursor-not-allowed' 
+                                                    : 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700'
+                                            } text-white`}
+                                        >
+                                            Continue
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            // Update just the wallet connection return statement in your AgentConfiguration component:
+
+return (
+    <div className="min-h-screen pt-20">
+        <div className="container mx-auto px-6 py-12">
+            <div className="max-w-md mx-auto">
+                <div className="solid-black border border-purple-500/20 rounded-lg p-8 text-center">
+                    <h2 className="text-3xl font-bold mb-6 font-['Syncopate']">Connect Your Wallet</h2>
+                    <p className="text-gray-400 mb-8">Connect your Phantom wallet to start configuring your AI agent.</p>
+                    {error && (
+                        <p className="text-red-500 mb-4">{error}</p>
+                    )}
+                    <div className="flex justify-center"> {/* Added this wrapper div */}
+                        <button 
+                            onClick={connectWallet}
+                            className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-3 rounded-md hover:from-purple-700 hover:to-blue-700 transition-all duration-300 flex items-center justify-center gap-2"
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"/>
+                            ) : error ? (
+                                'Install Phantom Wallet'
+                            ) : (
+                                'Connect Phantom Wallet'
+                            )}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+);
+        }
+
+
+        const root = ReactDOM.createRoot(document.getElementById('configuration-root'));
+        root.render(<AgentConfiguration />);
+    </script>
+</body>
+</html>
