@@ -114,22 +114,99 @@
     }
 }
 
-        /* Original cyber-button styles for hero section */
-        .hero-cyber-button {
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            padding: 1px;
-            overflow: hidden;
-        }
+        /* Hero section button styles */
+.hero-cyber-button {
+    position: relative;
+    display: inline-block;
+    padding: 2px;
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    border-radius: 0.375rem;
+    overflow: hidden;
+    animation: borderAnimation 3s linear infinite;
+}
 
-        .hero-cyber-button-inner {
-            background: var(--darker);
-            transition: all 0.3s;
-        }
+.hero-cyber-button-inner {
+    background: var(--darker);
+    transition: all 0.3s;
+    padding: 1rem 2rem;
+    border-radius: 0.25rem;
+    display: block;
+    position: relative;
+    z-index: 2;
+}
 
-        .hero-cyber-button:hover .hero-cyber-button-inner {
-            background: rgba(10, 10, 10, 0.9);
-            transform: scale(0.98);
-        }
+.hero-cyber-button::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent,
+        transparent,
+        #8B5CF6,
+        #8B5CF6
+    );
+    transform-origin: 0 0;
+    animation: rotate 3s linear infinite;
+}
+
+.hero-cyber-button::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    background: var(--darker);
+    border-radius: 0.25rem;
+}
+
+.hero-cyber-button:hover .hero-cyber-button-inner {
+    background: rgba(10, 10, 10, 0.9);
+    transform: scale(0.98);
+}
+
+/* Watch trailer button style */
+.trailer-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 1rem 2rem;
+    color: #fff;
+    text-decoration: none;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: transparent;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 0.375rem;
+}
+
+.trailer-button:hover {
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+    border-color: rgba(139, 92, 246, 0.8);
+    background: rgba(139, 92, 246, 0.1);
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes borderAnimation {
+    0% {
+        filter: hue-rotate(0deg) brightness(1);
+    }
+    50% {
+        filter: hue-rotate(30deg) brightness(1.2);
+    }
+    100% {
+        filter: hue-rotate(0deg) brightness(1);
+    }
+}
 
         .feature-card {
             background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), transparent);
@@ -207,12 +284,19 @@
                     train it with cutting-edge AI, and battle for glory and rewards.
                 </p>
                 <div class="flex flex-wrap gap-6">
-                    <button class="hero-cyber-button rounded-md">
-                        <a href="configure" class="hero-cyber-button-inner px-8 py-4">
-                            Create Your Fighter
-                        </a>
-                    </button>
-                    <button id="watchTrailerBtn" class="bg-black/50 border border-purple-500/20 hover:border-purple-500/40 px-8 py-4 rounded-md transition-all duration-300 group">
+                    <button class="hero-cyber-button">
+    <a href="configure" class="hero-cyber-button-inner">
+        Create Your Fighter
+    </a>
+</button>
+<button id="watchTrailerBtn" class="trailer-button group">
+    <span class="flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-500 group-hover:text-purple-400 transition-colors">
+            <polygon points="5 3 19 12 5 21 5 3" />
+        </svg>
+        Watch Trailer
+    </span>
+</button>
                         <span class="flex items-center gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-500 group-hover:text-purple-400 transition-colors">
                                 <polygon points="5 3 19 12 5 21 5 3" />
