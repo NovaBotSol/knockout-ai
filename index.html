@@ -50,65 +50,69 @@
         }
 
         /* Nav cyber-button styles */
-        .cyber-button-container {
-            position: relative;
-            display: inline-block;
-        }
+.cyber-button-container {
+    position: relative;
+    display: inline-block;
+}
 
-        .cyber-button {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            padding: 0.5rem 1.5rem;
-            color: #fff;
-            text-decoration: none;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            background: transparent;
-        }
+.cyber-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1.5rem;
+    color: #fff;
+    text-decoration: none;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: transparent;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 0.375rem;
+}
 
-        .cyber-button::before,
-        .cyber-button::after {
-            content: '';
-            position: absolute;
-            height: 2px;
-            width: 100%;
-            background: var(--primary);
-            transition: all 0.3s ease;
-        }
+.cyber-button::before,
+.cyber-button::after {
+    content: '';
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    background: var(--primary);
+    transition: all 0.3s ease;
+}
 
-        .cyber-button::before {
-            top: 0;
-            left: -100%;
-        }
+.cyber-button::before {
+    top: 0;
+    left: -100%;
+}
 
-        .cyber-button::after {
-            bottom: 0;
-            right: -100%;
-        }
+.cyber-button::after {
+    bottom: 0;
+    right: -100%;
+}
 
-        .cyber-button:hover::before {
-            left: 0;
-        }
+.cyber-button:hover::before {
+    left: 0;
+}
 
-        .cyber-button:hover::after {
-            right: 0;
-        }
+.cyber-button:hover::after {
+    right: 0;
+}
 
-        .cyber-button:hover {
-            box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
-        }
+.cyber-button:hover {
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+    border-color: rgba(139, 92, 246, 0.8);
+    background: rgba(139, 92, 246, 0.1);
+}
 
-        @media (max-width: 768px) {
-            .cyber-button {
-                padding: 0.4rem 1.2rem;
-            }
-            
-            .cyber-button::before,
-            .cyber-button::after {
-                display: none;
-            }
-        }
+@media (max-width: 768px) {
+    .cyber-button {
+        padding: 0.4rem 1.2rem;
+    }
+    
+    .cyber-button::before,
+    .cyber-button::after {
+        display: none;
+    }
+}
 
         /* Original cyber-button styles for hero section */
         .hero-cyber-button {
